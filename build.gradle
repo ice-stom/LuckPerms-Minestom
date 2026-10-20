@@ -14,13 +14,15 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
-    apply plugin: 'org.cadixdev.licenser'
+//    apply plugin: 'org.cadixdev.licenser'
 
     group = 'dev.lu15'
     version = '5.5-SNAPSHOT'
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
@@ -42,12 +44,10 @@ subprojects {
 
     def determinePatchVersion = {
         // get the name of the last tag
-        def tagInfo = new ByteArrayOutputStream()
-        exec {
+        def tagInfo = providers.exec {
             commandLine 'git', 'describe', '--tags'
-            standardOutput = tagInfo
-        }
-        tagInfo = tagInfo.toString()
+            ignoreExitValue = true
+        }.standardOutput.asText.get().trim()
 
         if (!tagInfo.contains('-')) {
             return 0
@@ -61,11 +61,11 @@ subprojects {
     project.ext.apiVersion = project.ext.majorVersion + '.' + project.ext.minorVersion
     project.ext.fullVersion = project.ext.apiVersion + '.' + project.ext.patchVersion
 
-    license {
-        header = rootProject.file('HEADER.txt')
-        include '**/*.java'
-        newLine = true
-    }
+//    license {
+//        header = rootProject.file('HEADER.txt')
+//        include '**/*.java'
+//        newLine = true
+//    }
 
     repositories {
         // Fix issue with lwjgl-freetype not being found on macOS / ForgeGradle issue

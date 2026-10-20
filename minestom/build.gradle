@@ -5,15 +5,17 @@ plugins {
 }
 
 // minestom requires java 21+
-sourceCompatibility = 21
-targetCompatibility = 21
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    var minestom = "net.minestom:minestom:2025.07.27-1.21.8"
+    var minestom = "net.minestom:minestom:2026.01.08-1.21.11"
 
     api(project(":common")) {
         // exclude default config providers as they are inaccessible from the minestom module anyway
@@ -49,7 +51,7 @@ task processSource(type: Sync) {
     into project.getLayout().getBuildDirectory().get().dir("src")
 }
 
-license.ignoreFailures = true
+//license.ignoreFailures = true
 
 compileJava {
     source = processSource.outputs
